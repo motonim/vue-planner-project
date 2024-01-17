@@ -5,7 +5,7 @@
             <div class="icons">
                 <span class="material-icons">edit</span>
                 <span class="material-icons" @click="deleteProject">delete</span>
-                <span class="material-icons">done</span>
+                <span class="material-icons" @click="toggleComplete">done</span>
             </div>
         </div>
         <div class="details" v-if="showDetails">
@@ -31,6 +31,13 @@ export default {
             fetch(this.uri, { method: 'DELETE' })
                 .then(() => this.$emit('delete', this.project.id)) // in this case, we don't need any response because it's deleting an item.
                 .catch(err => console.log(err.message))
+        },
+        toggleComplete() {
+            fetch(this.uri, { 
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify({ complete: !this.project.complete })
+             }) // instead of UPDATE which updates the whole object, patch updates a certain part of the object
         }
     }
 }
